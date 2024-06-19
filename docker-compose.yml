@@ -1,0 +1,52 @@
+version: '3.8'
+name: 'nest-server'
+services:
+  aws:
+    image: localstack/localstack:2.1.0
+    environment:
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=sqs #,s3
+      - EAGER_SERVICE_LOADING=1
+    ports:
+      - '4566-4597:4566-4597'
+    volumes:
+      - ./localstack:/etc/localstack/init/ready.d
+  mongo:
+    image: mongo:7.0
+    networks:
+      - mongo-network
+    expose:
+      - '27017'
+    ports:
+      - '27017:27017'
+    restart: on-failure
+    environment:
+      MONGO_INITDB_DATABASE: nest-server
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: passw0rd
+    volumes:
+      - ${PWD}/mongodb/migrations/:/var/lib/mongo/migrations/
+  mongo-express:
+    image: mongo-express:1.0.0-alpha
+    restart: unless-stopped
+    networks:
+      - mongo-network
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: passw0rd
+      ME_CONFIG_MONGODB_URL: mongodb://admin:passw0rd@mongo:27017/
+    depends_on:
+      - mongo
+  redis:
+    image: redis:6.0.20
+    ports:
+      - 6379:6379
+
+# define a network in order to ensure our dockerized
+# app can access the above services
+networks:
+  mongo-network:
+    driver: bridge

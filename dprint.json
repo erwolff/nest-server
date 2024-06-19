@@ -1,0 +1,29 @@
+{
+  "typescript": {
+    "indentWidth": 2,
+    "quoteStyle": "preferSingle",
+    "singleBodyPosition": "maintain",
+    "bracePosition": "maintain",
+    "useBraces": "maintain",
+    "preferSingleLine": false,
+    "memberExpression.linePerExpression": false,
+    "binaryExpression.linePerExpression": false,
+    "trailingCommas": "never",
+    "arrowFunction.useParentheses": "preferNone"
+  },
+  "json": {
+    "indentWidth": 2
+  },
+  "dockerfile": {
+  },
+  "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,dockerfile}"],
+  "excludes": [
+    "**/node_modules",
+    "**/*-lock.json"
+  ],
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.84.4.wasm",
+    "https://plugins.dprint.dev/json-0.17.2.wasm",
+    "https://plugins.dprint.dev/dockerfile-0.3.0.wasm"
+  ]
+}

@@ -15,5 +15,5 @@ export class FindMoviesDto {
   @IsArray()
   @Transform(split)
   @IsOptional()
-  genre?: string[];
+  genres?: string[];
 }

@@ -1,12 +1,11 @@
 import { toFilterQuery } from '@/db';
-import { Page } from '@/db/model';
 import { NestServerLogger } from '@/logger/nest-server.logger';
 import { CreateMovieDto, FindMoviesDto, Movie, MovieResponse, toMovie, UpdateMovieDto } from '@/movie/model';
 import { MovieRepository } from '@/movie/movie.repository';
-import { PageDto, toUpdateQuery } from '@/shared/controller/model';
+import { PageDto, PageResponse, toUpdateQuery } from '@/shared/controller/model';
 import { errMsg, internalServerError, ServiceError, serviceError, ServiceErrorCode, typedError } from '@/shared/error';
 import { Injectable } from '@nestjs/common';
-import { Ok, Result } from '@sniptt/monads';
+import { None, Ok, Result } from '@sniptt/monads';
 
 @Injectable()
 export class MovieService {
@@ -49,16 +48,25 @@ export class MovieService {
     });
   }
 
-  public async findAllMovies(
+  public async findMovies(
     dto: FindMoviesDto,
     page: PageDto
-  ): Promise<Result<Page<Movie>, ServiceError>> {
+  ): Promise<Result<PageResponse<MovieResponse>, ServiceError>> {
     const result = await this.movieRepo.findAll(page, toFilterQuery(dto));
     if (result.isErr()) {
       this.logger.error(`Error when finding all movies: ${errMsg(result)}`);
       return internalServerError();
     }
-    return result;
+    return Ok(new PageResponse(result.unwrap().map(it => new MovieResponse(it))));
+  }
+
+  public async deleteMovie(movieId: string): Promise<Result<typeof None, ServiceError>> {
+    const result = await this.movieRepo.deleteById(movieId);
+    if (result.isErr()) {
+      this.logger.error(`Error when deleting movie by id ${movieId}`);
+      return internalServerError();
+    }
+    return Ok(None);
   }
 
   private transformErr(result: Result<Movie, ServiceError>): Result<MovieResponse, ServiceError> {

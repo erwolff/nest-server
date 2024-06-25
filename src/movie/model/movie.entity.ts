@@ -1,7 +1,7 @@
 import { BaseEntity } from '@/db/model';
 import { modelOptions, prop } from '@typegoose/typegoose';
 
-@modelOptions({ schemaOptions: { collection: 'movies' } })
+@modelOptions({ schemaOptions: { collection: 'movies', collation: { locale: 'en', strength: 2 } } })
 export class Movie extends BaseEntity {
   @prop({ type: String, required: true, index: true, unique: true })
   title: string;

@@ -15,7 +15,7 @@ export class AuthService {
   }
 
   public async logout(res: Response): Promise<Result<typeof None, ServiceError>> {
-    return await this.helper.removeAccess(res);
+    return await this.helper.revokeAccess(res);
   }
 
   public async signUp(dto: SignUpDto, res: Response): Promise<Result<UserResponse, ServiceError>> {

@@ -9,13 +9,13 @@ export class UpdateMovieDto {
 
   @ApiProperty({ example: Swagger.movie.genres })
   @IsOptional()
-  genres: string[];
+  genres?: string[];
 
   @ApiProperty({ example: Swagger.movie.releaseYear })
   @IsOptional()
-  releaseYear: number;
+  releaseYear?: number;
 
   @ApiProperty({ example: Swagger.movie.runtimeMins })
   @IsOptional()
-  runtimeMins: number;
+  runtimeMins?: number;
 }

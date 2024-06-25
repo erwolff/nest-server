@@ -44,7 +44,7 @@ export class AuthServiceHelper {
     }
   }
 
-  public async removeAccess(res: Response): Promise<Result<typeof None, ServiceError>> {
+  public async revokeAccess(res: Response): Promise<Result<typeof None, ServiceError>> {
     this.authTokenService.clearAuthCookies(res);
     return Ok(None);
   }
@@ -142,6 +142,6 @@ export class AuthServiceHelper {
   }
 
   private isDuplicateKeyError(serviceError: ServiceError): boolean {
-    return (serviceError.error as any).code === duplicateKeyErrorCode;
+    return (serviceError.error as any)?.code === duplicateKeyErrorCode;
   }
 }

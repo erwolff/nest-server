@@ -82,6 +82,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
+    "casual": "^1.6.2",
     "dprint": "^0.45.0",
     "eslint": "^8.46.0",
     "eslint-plugin-dprint-integration": "^0.3.0",

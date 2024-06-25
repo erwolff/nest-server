@@ -5,7 +5,7 @@ import { PageDto, PageResponse } from '@/shared/controller/model';
 import { ParseIdPipe } from '@/shared/controller/validation';
 import { ServiceErrorCode, throwHttpException } from '@/shared/error';
 import { ApiRoute } from '@/shared/swagger';
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('movies')
@@ -90,7 +90,27 @@ export class MovieController {
     @Query() dto: FindMoviesDto,
     @Query() page: PageDto
   ): Promise<PageResponse<MovieResponse>> {
-    return (await this.movieService.findAllMovies(dto, page)).match({
+    return (await this.movieService.findMovies(dto, page)).match({
+      ok: _ => _,
+      err: e => throwHttpException(e)
+    });
+  }
+
+  @Secure({ roles: [AuthRole.ADMIN] })
+  @HttpCode(HttpStatus.OK)
+  @Delete('/:id')
+  @ApiRoute('Delete the movie with the supplied id', {
+    secure: true,
+    admin: true,
+    success: {
+      status: HttpStatus.OK,
+      description: 'The movie was successfully deleted'
+    }
+  })
+  public async deleteMovie(
+    @Param('id', ParseIdPipe) id: string
+  ): Promise<void> {
+    (await this.movieService.deleteMovie(id)).match({
       ok: _ => _,
       err: e => throwHttpException(e)
     });

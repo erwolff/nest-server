@@ -18,7 +18,7 @@ export class CreateMovieDto {
   releaseYear: number;
 
   @ApiProperty({ example: Swagger.movie.runtimeMins })
-  @IsNumber({ })
+  @IsNumber()
   runtimeMins: number;
 }
 

@@ -4,6 +4,7 @@ import { CacheModule } from '@/cache/cache.module';
 import config from '@/config';
 import { DbModule } from '@/db/db.module';
 import { LoggerModule } from '@/logger/logger.module';
+import { RequestLogger } from '@/logger/request.logger';
 import { MovieModule } from '@/movie/movie.module';
 import { PubSubModule } from '@/pubsub/pub-sub.module';
 import { UserModule } from '@/user/user.module';
@@ -30,6 +31,6 @@ export const appModuleMetadata: ModuleMetadata = {
 @Module(appModuleMetadata)
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // consumer.apply(RequestLogger).forRoutes('*');
+    consumer.apply(RequestLogger).forRoutes('*');
   }
 }
